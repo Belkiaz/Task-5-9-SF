@@ -1,0 +1,75 @@
+Команды для модели User:
+user1 = User.objects.create_user("AlterEgo")
+user2 = User.objects.create_user("HappyWriter")
+user3 = User.objects.create_user("MyLttlePony")
+user4 = User.objects.create_user("BiggyBunny")
+
+Команды для модели Author:
+author1 = Author.objects.create(author_id=1)
+<Author: AlterEgo>
+author2 = Author.objects.create(author_id=2)
+<Author: HappyWriter>
+
+Команды для модели Category:
+category1 = Category.objects.create(topic='Sport')
+category2 = Category.objects.create(topic='Policy')
+category3 = Category.objects.create(topic='Computer Games')
+category4 = Category.objects.create(topic='Music')
+
+Команды для модели Post:
+post1 = Post.objects.create(type_content=Content_type.NEWS, 
+				article='Комментарий Ришарлисона после победы над Сборной Сербии',
+				text_post='Не знаю, видели ли вы, но я забил аналогичный гол на тренировке в Италии, – сказал Ришарлисон уже сейчас после матча.',
+				author_rel_id = 1)
+post1.category_rel.add(category1)
+				
+post2 = Post.objects.create(type_content=Content_type.NEWS,
+				article='Чемпионы 2022 World Championship стали свободными агентами',
+				text_post='Все участники состава DRX по League of Legends стали свободными агентами. Об этом сообщили представители киберспортивной организации на официальной странице в твиттере.',
+				author_rel_id=2)
+post2.category_rel.add(category1, category3)
+
+post3 = Post.objects.create(type_content=Content_type.ARTICLE,
+				article='Эффект Моцарта',
+				text_post='Слушание музыки Моцарта усиливает нашу мозговую активность. Послушав Моцарта, люди, отвечающие на стандартный IQ-тест, демонстрируют повышение интеллекта.',
+				author_rel_id=2)
+post3.category_rel.add(category4)
+
+post4 = Post.objects.create(type_content=Content_type.ARTICLE,
+				article='Закон о музыке',
+				text_post='Закон о музыке охватывает ряд традиционных юридических вопросов, включая закон об интеллектуальной собственности, включая закон об интеллектуальной собственности',
+				author_rel_id=2)
+post4.category_rel.add(category2, category4)
+
+Команды для модели Comment:
+comment1 = Comment.objects.create(text_comment='Клевый матч был, бразильцы красавцы.',
+					comm_post_id=1,
+					comm_us_id=3)
+comment2 = Comment.objects.create(text_comment='Добби свободны :D',
+					comm_post_id=2,
+					comm_us_id=1)
+comment3 = Comment.objects.create(text_comment='На что-то из серии британских ученых похоже...',
+					comm_post_id=3,
+					comm_us_id=4)
+comment4 = Comment.objects.create(text_comment='Деепричастный оборот дважды повторяется)',
+					comm_post_id=4,
+					comm_us_id=1)
+comment5 = Comment.objects.create(text_comment='Увидел, спасибо!',
+					comm_post_id=4,
+					comm_us_id=2)
+
+Команды для лайков/дизлайков:
+Post.like_post(Post.objects.get(pk=1))  - лайк для первой новости
+Post.dislike_post(Post.objects.get(pk=1)) - дизлайк для первой новости
+Comment.like_comm(Comment.objects.get(pk=1)) - лайк для комментария 1
+Comment.dislike_comm(Comment.objects.get(pk=1)) - дизлайк для комментария 2
+
+
+Команда update_rating:
+Author.update_rating(Author.objects.get(pk=1)) - обновление рейтинга автора AlterEgo
+
+Запросы (задание 9, 10, 11)
+Author.objects.all().order_by('-rating_author').values('author__username', 'rating_author')[0]
+Post.objects.annotate(author_name=F('author_rel__author__username')).all().order_by('-rating_post').values('datetime_post','author_name','rating_post', 'article', 'text_post')[0]   
+
+
